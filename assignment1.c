@@ -1,196 +1,195 @@
-#include<stdio.h>
-
-void accept(int *ptr, int n)
-{   
-    for(int i=0 ; i<n ; i++)
+#include <stdio.h>
+int SIZE = 5;
+void swap(int *p, int *q)
+{
+    int temp = *p;
+    *p = *q;
+    *q = temp;
+}
+void getdata(int *ptr)
+{
+    for (int i = 0; i < SIZE; i++)
     {
-        printf("Enter the %d element of set : \n",i+1);
-        scanf("%d",(ptr+i));
+        printf("Enter the element %d :", i + 1);
+        scanf("%d", &ptr[i]);
     }
 }
 
-void display(int *ptr, int n)
+void display(int *ptr, int size)
 {
-    printf("{");
-    for (int i = 0; i < n; i++)
+    printf("\n {");
+    int i = 0;
+    for (i = 0; i < size - 1; i++)
     {
-        printf("%d", *(ptr + i));
-        if (i < n-1)
-        {
-            printf(",");
-        }
+        printf("%d,", ptr[i]);
     }
+    printf("%d", ptr[i]);
     printf("}\n");
 }
 
-void Union(int *a, int n1, int *b, int n2)
+void Uni(int *p, int *q)
 {
-    int u[n1+n2], k=0 ,i1 ,i2,i3,j;
-    for(i1=0 ; i1<n1 ; i1++)
+    int x = 2 * SIZE;
+    int arr[x];
+    int temp = 0;
+
+    int i, j, k = 0;
+    for (int i = 0; i < SIZE; i++)
     {
-        u[k]=*(a+i1);
+        arr[i] = p[i];
         k++;
     }
-    for(j=0 ; j<n2 ; j++)
+    for (int i = 0; i < SIZE; i++)
     {
+        temp = 0;
+        for (int j = 0; j < SIZE; j++)
+        {
 
-        for(i2=0 ; i2<n1 ; i2++)
-        {
-            if(*(b+j)==*(a+i2))
-            {break;}
+            if (q[i] == p[j])
+            {
+                break;
+            }
+            temp++;
         }
-        if(i2==n1)
+        if (temp == SIZE)
         {
-            u[k]=*(b+j);
+            arr[k] = q[i];
             k++;
         }
     }
-    printf("Union Of Set is : \n");
-    printf("U=");
-    display(u,k);
+    
+    display(arr, k);
 }
 
-void Intersetion(int *a, int n1, int *b, int n2)
+void intersection(int *p, int *q)
 {
-    int  I[n1+n2], k=0, j, i, l; 
-    for(j=0 ; j<n2 ; j++)
+    int ans[SIZE];
+    int k = 0;
+    int element;
+    for (int i = 0; i < SIZE; i++)
     {
-
-        for(i=0 ; i<n1 ; i++)
+        element = p[i];
+        for (int j = 0; j < SIZE; j++)
         {
-            if(*(a+j)==*(b+i))
+            if (element == q[j])
             {
-                I[k]=*(a+j);
+                ans[k] = element;
                 k++;
             }
         }
     }
-    printf("Intersection of set is : \n");
-    printf("I=");
-    display(I,k);
+    display(ans, k);
 }
 
-void Difference_A(int *a, int n1, int *b, int n2)
+int difference(int *p, int *q)
 {
-    int i=0 , j=0 , k=0;
-    int D[n1];
-    for(i=0;i<n1;i++)
+    int count = 0;
+    int size = 0;
+    int temp[SIZE];
+    for (int i = 0; i < SIZE; i++)
     {
-        for(j=0;j<n2;j++){
-            if(a[i]==b[j]){
-                break;
+        count = 0;
+        for (int j = 0; j < SIZE; j++)
+        {
+            if (p[i] != q[j])
+            {
+                count++;
             }
         }
-        if(j==n2){
-            D[k]=a[i];
-            k++;
+        if (count == SIZE)
+        {
+            temp[size] = p[i];
+            size++;
         }
     }
-    printf("The elements of which are in set a but not in set b : \n");
-    printf("D(a-b)=");
-    display(D,k);
+    display(temp, size);
 }
 
-void Difference_B(int *a, int n1, int *b, int n2)
+
+void symmetric(int *p, int *q)
 {
-    int i=0 , j=0 , k=0;
-    int D[n2];
-    for(i=0;i<n2;i++)
+    int count = 0;
+    int size = 0;
+    int temp[2 * SIZE];
+    for (int i = 0; i < SIZE; i++)
     {
-        for(j=0;j<n1;j++){
-            if(b[i]==a[j]){
-                break;
+        count = 0;
+        for (int j = 0; j < SIZE; j++)
+        {
+            if (p[i] != q[j])
+            {
+                count++;
             }
         }
-        if(j==n1){
-            D[k]=b[i];
-            k++;
+        if (count == SIZE)
+        {
+            temp[size] = p[i];
+            size++;
         }
     }
-    printf("The elements of which are in set b but not in set a : \n");
-    printf("D(b-a)=");
-    display(D,k);
+    for (int i = 0; i < SIZE; i++)
+    {
+        count = 0;
+        for (int j = 0; j < SIZE; j++)
+        {
+            if (q[i] != p[j])
+            {
+                count++;
+            }
+        }
+        if (count == SIZE)
+        {
+            temp[size] = q[i];
+            size++;
+        }
+    }
+    for (int i = size; i < 2 * SIZE; i++)
+    {
+        temp[i] = 0;
+    }
+    display(temp, size);
 }
-
-void Symetric_Difference(int *a, int n1, int *b, int n2)
+int main()
 {
-    int i=0 , j=0 , k=0;
-    int D[n1+n2];
-    for(i=0;i<n1;i++)
-    {
-        for(j=0;j<n2;j++){
-            if(a[i]==b[j]){
-                break;
-            }
-        }
-        if(j==n2){
-            D[k]=a[i];
-            k++;
-        }
-    }
-    for(i=0;i<n2;i++)
-    {
-        for(j=0;j<n1;j++){
-            if(b[i]==a[j]){
-                break;
-            }
-        }
-        if(j==n1){
-            D[k]=b[i];
-            k++;
-        }
-    }
-    printf("The symetric difference of set a and b : \n");
-    printf("D=");
-    display(D,k);
-}
+    int r = 1;
+    int arr1[SIZE], arr2[SIZE];
+    printf("Enter the First Set :\n");
+    getdata(arr1);
+    printf("Enter the Second Set :\n");
+    getdata(arr2);
+    display(arr1, SIZE);
+    display(arr2, SIZE);
 
-
-int main(int argc, char const *argv[])
-{   int n1, n2;
-    char expression;
-
-    printf("Enter the size of set a \n");
-    scanf("%d",&n1);
-    int a[n1] ;
-    printf("Enter the set a : \n");
-    accept(a,n1);
-    printf("Enter the size of set b \n");
-    scanf("%d",&n2);
-    int  b[n2];
-    printf("Enter the set b : \n");
-    accept(b,n2);
-    printf("a=");
-    display(a,n1);
-    printf("b=");
-    display(b,n2);
-    int t;
-    printf("Enter the number of operation you wants to do \n");
-    scanf("%d",&t);
-    while (t--)
+    while (r)
     {
-    printf("\n\nEnter the key as per your choice : \n1.Union 2.Intersection 3.Difference(a-b) 4.Difference(b-a) \n");
-    scanf(" %c",&expression);
-    switch (expression)
-    {
-    case '1':
-        Union(a,n1,b,n2);
-        break;
-    case '2':
-    Intersetion(a,n1,b,n2);
-        break;
-    case '3':
-    Difference_A(a,n1,b,n2);
-        break;
-    case '4':
-    Difference_B(a,n1,b,n2);
-        break;
-    case '5':
-    Symetric_Difference(a,n1,b,n2);
-        break;
-    default:
-        break;
+        printf("\nEnter the choice :\n");
+        printf(" 1:Union Of Sets\n 2:Intersection of sets \n 3:Difference(A-B)\n 4:Difference(B-A)\n 5:Symmetric Difference in Sets\n");
+
+        int choice;
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+            Uni(arr1, arr2);
+            break;
+        case 2:
+            intersection(arr1, arr2);
+            break;
+        case 3:
+            difference(arr1, arr2);
+            break;
+        case 4:
+            difference(arr2,arr1);
+            break;
+        case 5:
+            symmetric(arr1, arr2);
+            break;
+        default :
+            printf("Wrong choice");
+            break;
+        }
+
+        printf("Do you want to perform another operation (1) or (0)");
+        scanf("%d", &r);
     }
-    }
-    return 0;
 }
